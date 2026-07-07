@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "80"
+    environment:
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=true
+      - RAILS_SERVE_STATIC_FILES=true
+      - DATABASE_URL=sqlite3:storage/production.sqlite3
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+    volumes:
+      # Centralized storage with human-readable name
+      - /data/coolify/storage/servicenow-news:/rails/storage
+    networks:
+      - coolify
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  coolify:
+    external: true
