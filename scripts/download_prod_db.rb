@@ -173,8 +173,10 @@ class DownloadProdDb
     puts "⬇️  Downloading #{key}..."
 
     begin
-      s3_client.get_object(bucket: bucket, key: key) do |chunk|
-        File.open(local_path, "ab") { |file| file.write(chunk) }
+      File.open(local_path, "wb") do |file|
+        s3_client.get_object(bucket: bucket, key: key) do |chunk|
+          file.write(chunk)
+        end
       end
 
       size_mb = (File.size(local_path) / 1024.0 / 1024.0).round(2)

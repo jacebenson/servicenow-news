@@ -100,7 +100,7 @@
         <% participant = data[:participant] %>
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
           <%# Participant Link %>
-          <%= link_to who_path(name: participant.slug), class: "block p-4" do %>
+          <%= link_to person_path(name: participant.slug), class: "block p-4" do %>
             <%# Avatar and Basic Info %>
             <div class="flex items-start gap-3 mb-3">
               <%# Avatar %>

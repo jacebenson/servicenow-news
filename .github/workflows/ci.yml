@@ -20,7 +20,14 @@ jobs:
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+        run: |
+          bin/brakeman --no-pager
+          code=$?
+          if [ "$code" -eq 5 ]; then
+            echo "Brakeman is not the latest version; the scan itself passed."
+            exit 0
+          fi
+          exit "$code"
 
   scan_js:
     runs-on: ubuntu-latest

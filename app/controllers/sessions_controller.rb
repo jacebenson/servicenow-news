@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def new
-    redirect_to items_path if logged_in?
+    redirect_to root_path if logged_in?
   end
 
   def create
@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     if user&.authenticate(params[:password].to_s)
       reset_session  # Prevent session fixation attacks
       session[:user_id] = user.id
-      redirect_to items_path, notice: "Welcome back, #{user.name || user.email}!"
+      redirect_to root_path, notice: "Welcome back, #{user.name || user.email}!"
     else
       flash.now[:alert] = "Invalid email or password"
       render :new, status: :unprocessable_entity
@@ -18,6 +18,6 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    redirect_to items_path, notice: "You have been logged out"
+    redirect_to root_path, notice: "You have been logged out"
   end
 end

@@ -110,7 +110,7 @@
         <% if @participants.any? %>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <% @participants.each do |participant| %>
-              <%= link_to who_path(name: participant.slug), class: "flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 hover:border-blue-200 transition-colors" do %>
+              <%= link_to person_path(name: participant.slug), class: "flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 hover:border-blue-200 transition-colors" do %>
                 <% if participant.image_url.present? %>
                   <img src="<%= participant.image_url %>" alt="<%= participant.name %>"
                        class="h-12 w-12 rounded-full object-cover"
