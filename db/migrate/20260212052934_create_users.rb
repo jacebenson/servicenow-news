@@ -8,7 +8,6 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :roles
       t.string :reset_token
       t.datetime :reset_token_expires_at
-
     end
     add_index :users, :email, unique: true
   end

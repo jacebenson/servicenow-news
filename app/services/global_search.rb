@@ -48,7 +48,7 @@ class GlobalSearch
   def search_sql
     where_type = @type.present? ? "AND d.record_type = #{connection.quote(@type)}" : ""
     <<~SQL
-      SELECT d.*, 
+      SELECT d.*,
              CASE WHEN lower(d.title) = lower(#{connection.quote(@query)}) THEN 0 ELSE 1 END AS exact_rank,
              bm25(search_documents_fts, 8.0, 4.0, 1.0, 0.2) AS relevance,
              snippet(search_documents_fts, 2, '<mark>', '</mark>', '…', 18) AS content_excerpt

@@ -19,7 +19,7 @@ class GlobalSearchTest < ActiveSupport::TestCase
     result = GlobalSearch.new(query: "Moveworks").call
 
     assert_equal 4, result[:total_count]
-    assert_equal ["Moveworks", "Moveworks"], result[:exact_matches].map { |item| item[:title] }
+    assert_equal [ "Moveworks", "Moveworks" ], result[:exact_matches].map { |item| item[:title] }
     assert_equal 2, result[:groups]["news"][:count]
     assert_equal 2, result[:groups]["news"][:results].length
   end
@@ -28,7 +28,7 @@ class GlobalSearchTest < ActiveSupport::TestCase
     result = GlobalSearch.new(query: "Moveworks", type: "financial").call
 
     assert_equal 1, result[:total_count]
-    assert_equal ["financial"], result[:groups].keys
+    assert_equal [ "financial" ], result[:groups].keys
   end
 
   test "empty and unknown searches return no results" do

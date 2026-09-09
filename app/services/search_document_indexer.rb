@@ -54,10 +54,10 @@ class SearchDocumentIndexer
 
   def news_document(item)
     label = case item.item_type
-            when "video" then "Watch source"
-            when "podcast", "audio" then "Listen to source"
-            else "Read source"
-            end
+    when "video" then "Watch source"
+    when "podcast", "audio" then "Listen to source"
+    else "Read source"
+    end
     base("news", item,
       title: item.title,
       subtitle: item.item_type,

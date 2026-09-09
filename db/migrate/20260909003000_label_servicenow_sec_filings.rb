@@ -1,5 +1,5 @@
 class LabelServicenowSecFilings < ActiveRecord::Migration[8.0]
-  SEC_TYPES = ["Annual Report", "Quarterly Report", "Major Event Report"].freeze
+  SEC_TYPES = [ "Annual Report", "Quarterly Report", "Major Event Report" ].freeze
 
   def up
     ServicenowInvestment
