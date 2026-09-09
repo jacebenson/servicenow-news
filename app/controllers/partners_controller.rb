@@ -38,7 +38,7 @@ class PartnersController < ApplicationController
       safe_search = sanitize_sql_like(@search)
       search_term = "%#{safe_search}%"
       partners = partners.where(
-        "name LIKE ? OR notes LIKE ? OR city LIKE ? OR state LIKE ? OR country LIKE ?",
+        "companies.name LIKE ? OR companies.notes LIKE ? OR companies.city LIKE ? OR companies.state LIKE ? OR companies.country LIKE ?",
         search_term, search_term, search_term, search_term, search_term
       )
     end
