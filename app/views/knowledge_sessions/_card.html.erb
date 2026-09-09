@@ -51,7 +51,7 @@
             <% speaker = speaker_info[:participant] %>
             <% is_hidden = speaker_info[:hidden] %>
             <div class="flex items-center gap-2 <%= 'opacity-50' if is_hidden %>">
-              <%= link_to who_path(name: speaker.slug),
+              <%= link_to person_path(name: speaker.slug),
                   class: "flex-1 flex items-center gap-3 rounded-lg #{is_hidden ? 'bg-red-50 border border-red-200' : 'bg-slate-50'} px-3 py-2 hover:bg-slate-100 transition-colors" do %>
                 <% if speaker.image_url.present? %>
                   <img src="<%= speaker.image_url %>" alt="" class="h-10 w-10 rounded-full object-cover flex-shrink-0">

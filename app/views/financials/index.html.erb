@@ -1,0 +1,93 @@
+<% content_for :title, "Financials - News Jace Pro" %>
+
+<div class="mx-auto max-w-7xl py-10">
+  <div class="max-w-3xl">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">ServiceNow intelligence</p>
+    <h1 class="mt-3 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">The money trail.</h1>
+    <p class="mt-4 text-lg leading-8 text-slate-600">
+      Acquisitions, investments, and company filings collected from public sources. Search the activity, follow the source, and see what ServiceNow is buying and backing.
+    </p>
+  </div>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-3">
+    <div class="rounded-2xl bg-slate-950 p-5 text-white">
+      <p class="text-sm text-slate-400">Tracked records</p>
+      <p class="mt-2 text-3xl font-bold"><%= number_with_delimiter(@total_count) %></p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <p class="text-sm text-slate-500">Acquisitions</p>
+      <p class="mt-2 text-3xl font-bold text-slate-950"><%= number_with_delimiter(@acquisition_count) %></p>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5">
+      <p class="text-sm text-slate-500">Investments</p>
+      <p class="mt-2 text-3xl font-bold text-slate-950"><%= number_with_delimiter(@investment_count) %></p>
+    </div>
+  </div>
+
+  <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+    <%= form_with url: financials_path, method: :get, class: "grid gap-3 md:grid-cols-[1fr_auto_auto_auto]", local: true do %>
+      <%= search_field_tag :search, @search, placeholder: "Search companies, filings, or summaries...", class: "min-w-0 rounded-lg border-slate-300 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500" %>
+      <%= select_tag :type, options_for_select([["All activity", ""]] + @types.map { |type| [type, type] }, params[:type]), class: "rounded-lg border-slate-300 px-3 py-3 text-sm focus:border-blue-500 focus:ring-blue-500" %>
+      <%= select_tag :year, options_for_select([["All years", ""]] + @years.map { |year| [year, year] }, params[:year]), class: "rounded-lg border-slate-300 px-3 py-3 text-sm focus:border-blue-500 focus:ring-blue-500" %>
+      <%= submit_tag "Filter", class: "cursor-pointer rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700" %>
+    <% end %>
+    <% if @search.present? || params[:type].present? || params[:year].present? %>
+      <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-4 text-sm">
+        <p class="text-slate-500"><%= number_with_delimiter(@financials.total_count) %> matching records</p>
+        <%= link_to "Clear filters", financials_path, class: "font-semibold text-blue-600 hover:text-blue-800" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="divide-y divide-slate-100">
+      <% @financials.each do |financial| %>
+        <% badge_class = case financial.investment_type
+                         when "Acquisition" then "bg-rose-100 text-rose-700"
+                         when "Investment" then "bg-emerald-100 text-emerald-700"
+                         when "Quarterly Report", "Annual Report" then "bg-blue-100 text-blue-700"
+                         when "Major Event Report" then "bg-amber-100 text-amber-700"
+                         else "bg-slate-100 text-slate-600"
+                         end %>
+        <article class="grid gap-4 px-5 py-5 transition-colors hover:bg-slate-50 sm:grid-cols-[7rem_1fr_auto] sm:px-6">
+          <div class="text-sm text-slate-500 sm:border-r sm:border-slate-100 sm:pr-4">
+            <p class="font-semibold text-slate-950"><%= financial.date&.strftime("%b %-d") || "Undated" %></p>
+            <p><%= financial.date&.strftime("%Y") %></p>
+          </div>
+
+          <div class="min-w-0">
+            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold <%= badge_class %>"><%= financial.investment_type.presence || "Other" %></span>
+            <h2 class="mt-2 text-lg font-bold text-slate-950"><%= financial.company_name.presence || "Unnamed company" %></h2>
+            <% if financial.summary.present? %>
+              <p class="mt-1 max-w-3xl text-sm leading-6 text-slate-500"><%= truncate(financial.summary, length: 180) %></p>
+              <details class="mt-2 max-w-3xl text-sm">
+                <summary class="cursor-pointer font-semibold text-blue-600 hover:text-blue-800">Read full summary</summary>
+                <div class="mt-2 rounded-lg bg-slate-50 p-3 leading-6 text-slate-600"><%= simple_format(financial.summary) %></div>
+              </details>
+            <% end %>
+          </div>
+
+          <div class="flex items-start justify-between gap-4 sm:min-w-32 sm:flex-col sm:items-end sm:text-right">
+            <% if financial.amount.present? %>
+              <p class="text-lg font-bold text-slate-950"><%= financial_amount(financial.amount, financial.currency) %></p>
+            <% end %>
+            <% if financial.url.present? %>
+              <%= link_to "Source →", financial.url, target: "_blank", rel: "noopener", class: "text-sm font-semibold text-blue-600 hover:text-blue-800" %>
+            <% else %>
+              <span class="text-sm text-slate-400">No source</span>
+            <% end %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+
+    <% if @financials.empty? %>
+      <div class="p-12 text-center">
+        <p class="font-semibold text-slate-950">No matching financial activity.</p>
+        <p class="mt-1 text-sm text-slate-500">Try clearing one of the filters.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-6"><%= paginate @financials %></div>
+</div>

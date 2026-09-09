@@ -1,70 +1,118 @@
-<% content_for :title, "News Items - News Jace Pro" %>
+<% content_for :title, "ServiceNow intelligence - News Jace Pro" %>
 
-<div class="mt-4">
-  <%# Header with search %>
-  <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<% lead_item = @news_items.first %>
+<% recent_items = @news_items.drop(1) %>
+
+<div class="mx-auto max-w-7xl py-10">
+  <section class="grid gap-8 border-b border-slate-200 pb-10 lg:grid-cols-[1.4fr_0.6fr] lg:items-end">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900">ServiceNow News</h1>
-      <p class="text-gray-600"><%= @news_items.total_count %> items</p>
-    </div>
-
-    <form class="flex gap-2" onsubmit="return handleNewsSearch(event)">
-      <input type="text" id="news-search-input" value="<%= @search %>" placeholder="Search news..."
-          class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border text-sm w-64">
-      <button type="submit" class="rounded-md bg-blue-600 px-4 py-2 text-white text-sm hover:bg-blue-700 cursor-pointer">Search</button>
-      <% if @search.present? || @participant.present? %>
-        <%= link_to "Clear", items_path, class: "rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 text-sm hover:bg-gray-50" %>
-      <% end %>
-    </form>
-    <script>
-      function handleNewsSearch(e) {
-        e.preventDefault();
-        const search = document.getElementById('news-search-input').value.trim();
-        if (search) {
-          window.location.href = '/i/search/' + encodeURIComponent(search);
-        } else {
-          window.location.href = '/i';
-        }
-        return false;
-      }
-    </script>
-  </div>
-
-  <% if @participant %>
-    <div class="mb-4 flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
-      <% if @participant.image_url.present? %>
-        <img src="<%= @participant.image_url %>" alt="<%= @participant.name %>" class="h-12 w-12 rounded-full object-cover">
-      <% end %>
-      <div class="flex-1">
-        <h2 class="font-bold text-gray-900"><%= @participant.name %></h2>
-        <p class="text-sm text-gray-600"><%= @participant.title %></p>
+      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">News Jace Pro</p>
+      <h1 class="mt-3 max-w-4xl text-4xl font-black tracking-tight text-slate-950 sm:text-6xl">ServiceNow intelligence for people who need to know what changed.</h1>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">News, acquisitions, companies, people, events, and public filings in one searchable place. No vendor press-release fog.</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <%= link_to "Explore financials", financials_path, class: "rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700" %>
+        <%= link_to "Browse events", events_path, class: "rounded-lg border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" %>
       </div>
-      <%= link_to "View Profile", who_path(name: @participant.slug), class: "text-blue-600 hover:underline text-sm" %>
-      <%= link_to "Clear Filter", items_path, class: "text-gray-500 hover:text-gray-700 text-sm ml-2" %>
     </div>
-  <% end %>
 
-  <% if @search.present? %>
-    <div class="mb-4 bg-gray-50 border border-gray-200 rounded-lg p-3">
-      <p class="text-sm text-gray-600">
-        Search results for: "<span class="font-medium"><%= @search %></span>"
-      </p>
+    <div class="rounded-2xl bg-slate-950 p-6 text-white">
+      <p class="text-sm text-slate-400">The signal desk</p>
+      <p class="mt-3 text-2xl font-bold">What are you trying to understand?</p>
+      <div class="mt-5 grid gap-2 text-sm">
+        <%= link_to "What did ServiceNow buy?", financials_path(type: "Acquisition"), class: "rounded-lg bg-white/10 px-4 py-3 hover:bg-white/20" %>
+        <%= link_to "Who is shaping the ecosystem?", mvps_path, class: "rounded-lg bg-white/10 px-4 py-3 hover:bg-white/20" %>
+        <%= link_to "What are people building and teaching?", events_path, class: "rounded-lg bg-white/10 px-4 py-3 hover:bg-white/20" %>
+      </div>
     </div>
-  <% end %>
+  </section>
 
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-    <% @news_items.each do |item| %>
-      <%= render "news_items/card", item: item %>
+  <section class="mt-10">
+    <div class="flex flex-col gap-4 border-b border-slate-200 pb-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">The latest</p>
+        <h2 class="mt-1 text-2xl font-bold text-slate-950">What’s moving right now</h2>
+      </div>
+      <form class="flex w-full max-w-md gap-2" onsubmit="return handleNewsSearch(event)">
+        <input type="text" id="news-search-input" value="<%= @search %>" placeholder="Search news, people, companies..." class="min-w-0 flex-1 rounded-lg border-slate-300 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+        <button type="submit" class="rounded-lg bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800">Search</button>
+      </form>
+    </div>
+
+    <% if @participant %>
+      <div class="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+        Showing stories connected to <strong><%= @participant.name %></strong>.
+        <%= link_to "View profile", person_path(name: @participant.slug), class: "ml-2 font-semibold underline" %>
+        <%= link_to "Clear", items_path, class: "ml-2 underline" %>
+      </div>
     <% end %>
-  </div>
 
-  <% if @news_items.empty? %>
-    <div class="text-center py-12">
-      <p class="text-gray-500">No news items found</p>
+    <% if @search.present? %>
+      <p class="mt-5 text-sm text-slate-500">Search results for “<span class="font-semibold text-slate-900"><%= @search %></span>”</p>
+    <% end %>
+
+    <% if lead_item %>
+      <article class="mt-6 grid gap-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-[0.9fr_1.1fr] md:p-7">
+        <div class="min-h-56 overflow-hidden rounded-xl bg-slate-100">
+          <% if lead_item.image_url.present? %>
+            <img src="<%= lead_item.image_url %>" alt="" class="h-full w-full object-cover" loading="lazy">
+          <% else %>
+            <div class="flex h-full min-h-56 items-end bg-gradient-to-br from-blue-100 via-slate-100 to-slate-200 p-6">
+              <span class="text-5xl font-black text-slate-300">NJP</span>
+            </div>
+          <% end %>
+        </div>
+        <div class="flex flex-col justify-center">
+          <div class="flex items-center gap-2 text-sm text-slate-500">
+            <span class="font-semibold text-blue-600"><%= lead_item.news_feed&.title || "News" %></span>
+            <span>·</span>
+            <span><%= time_ago_in_words(ms_to_time(lead_item.published_at)) %> ago</span>
+          </div>
+          <h3 class="mt-3 text-2xl font-bold leading-tight text-slate-950 sm:text-3xl"><%= lead_item.title %></h3>
+          <% if lead_item.body.present? %>
+            <p class="mt-4 leading-7 text-slate-600"><%= truncate(lead_item.body.to_s.gsub(/[#*`]/, ""), length: 260) %></p>
+          <% end %>
+          <div class="mt-6">
+            <%= link_to "Read the story →", lead_item.url.presence || item_path(lead_item), target: (lead_item.url.present? ? "_blank" : nil), rel: (lead_item.url.present? ? "noopener" : nil), class: "font-semibold text-blue-600 hover:text-blue-800" %>
+          </div>
+        </div>
+      </article>
+    <% end %>
+
+    <div class="mt-6 divide-y divide-slate-200 border-y border-slate-200">
+      <% recent_items.each do |item| %>
+        <article class="grid gap-3 py-5 sm:grid-cols-[1fr_auto] sm:items-start">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <span><%= item.news_feed&.title || "News" %></span>
+              <span>·</span>
+              <span><%= time_ago_in_words(ms_to_time(item.published_at)) %> ago</span>
+            </div>
+            <h3 class="mt-2 text-lg font-bold leading-snug text-slate-950 hover:text-blue-700"><%= link_to item.title, item.url.presence || item_path(item), target: (item.url.present? ? "_blank" : nil), rel: (item.url.present? ? "noopener" : nil) %></h3>
+            <% if item.body.present? %>
+              <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600"><%= truncate(item.body.to_s.gsub(/[#*`]/, ""), length: 180) %></p>
+            <% end %>
+          </div>
+          <%= link_to "Details →", item_path(item), class: "text-sm font-semibold text-blue-600 hover:text-blue-800" %>
+        </article>
+      <% end %>
     </div>
-  <% end %>
 
-  <div class="mt-6">
-    <%= paginate @news_items %>
-  </div>
+    <% if @news_items.empty? %>
+      <div class="py-16 text-center">
+        <p class="font-semibold text-slate-950">No stories found.</p>
+        <p class="mt-1 text-sm text-slate-500">Try a different search.</p>
+      </div>
+    <% end %>
+
+    <div class="mt-6"><%= paginate @news_items %></div>
+  </section>
 </div>
+
+<script>
+  function handleNewsSearch(event) {
+    event.preventDefault();
+    const search = document.getElementById("news-search-input").value.trim();
+    window.location.href = search ? "/i/search/" + encodeURIComponent(search) : "/i";
+    return false;
+  }
+</script>

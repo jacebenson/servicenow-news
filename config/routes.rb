@@ -2,8 +2,9 @@ Rails.application.routes.draw do
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Root redirects to news items
-  root "news_items#index"
+  # Search-first entry point
+  root "search#index"
+  get "s", to: "search#index", as: :search
 
   # RSS feed
   get "feed", to: "news_items#index", as: :feed, defaults: { format: "rss" }
@@ -40,9 +41,14 @@ Rails.application.routes.draw do
   get "a/company/:company", to: "applications#index", as: :applications_by_company
   get "a/:id", to: "applications#show", as: :application, constraints: { id: /\d+/ }
 
-  # Participant profile
+  # Participant profiles (public compatibility + short route)
   get "who/:name", to: "participants#show", as: :who
+  get "w", to: "participants#index", as: :people
+  get "w/:name", to: "participants#show", as: :person
   post "participants/:id/link-company", to: "participants#link_company", as: :participant_link_company
+
+  # Financial activity
+  get "financials", to: "financials#index", as: :financials
 
   # MVP Awards
   get "mvps", to: "mvp_awards#index", as: :mvps
@@ -53,7 +59,9 @@ Rails.application.routes.draw do
     get "participants/search", to: "participants#search"
   end
 
-  # Knowledge Sessions - all events
+  # Knowledge Sessions / Events
+  get "e", to: "knowledge_sessions#index", defaults: { event: "all" }, as: :events
+  get "e/:event", to: "knowledge_sessions#index", as: :event
   get "sessions", to: "knowledge_sessions#index", defaults: { event: "all" }, as: :sessions
   %w[k20 k21 k22 k23 k24 k25 k26 nulledge25].each do |event|
     get "#{event}", to: "knowledge_sessions#index", defaults: { event: event }, as: event.to_sym

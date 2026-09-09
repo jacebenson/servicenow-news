@@ -3,6 +3,7 @@ class FetchSecFilingsJob < ApplicationJob
 
   # ServiceNow's CIK number with the SEC
   CIK = "0001373715"
+  COMPANY_NAME = "ServiceNow"
 
   # SEC requires a User-Agent header with contact info
   SEC_HEADERS = {
@@ -52,6 +53,7 @@ class FetchSecFilingsJob < ApplicationJob
         if existing
           existing.update!(
             date: Date.parse(filing[:filing_date]),
+            company_name: COMPANY_NAME,
             content: content,
             summary: summary
           )
@@ -62,6 +64,7 @@ class FetchSecFilingsJob < ApplicationJob
             investment_type: FORM_TYPES[filing[:form]],
             date: Date.parse(filing[:filing_date]),
             url: filing[:html_link],
+            company_name: COMPANY_NAME,
             content: content,
             summary: summary
           )

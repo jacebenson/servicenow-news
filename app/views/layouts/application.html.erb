@@ -20,7 +20,7 @@
   <body class="bg-white">
     <header class="border-b">
       <div class="flex items-center justify-between px-4 py-2">
-        <%= link_to items_path, class: "flex items-center" do %>
+        <%= link_to root_path, class: "flex items-center" do %>
           <img src="/favicon.png" alt="logo" class="h-12">
           <h1 class="text-3xl font-bold">
             <span class="hidden md:inline">
@@ -75,8 +75,6 @@
         </nav>
       </div>
     </header>
-
-    <%= render "shared/nav_tabs" if content_for?(:show_nav_tabs) || @show_nav_tabs %>
 
     <main class="px-4">
       <div id="flash-messages">

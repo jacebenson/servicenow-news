@@ -7,6 +7,32 @@ module ApplicationHelper
     true
   end
 
+  # Compact raw financial amounts for list views.
+  def financial_amount(amount, currency = nil)
+    return nil if amount.blank?
+
+    value = BigDecimal(amount.to_s)
+    symbol = {
+      "USD" => "$",
+      "CAD" => "CA$",
+      "EUR" => "€",
+      "GBP" => "£",
+      "INR" => "₹"
+    }.fetch(currency.to_s.upcase, currency.present? ? "#{currency} " : "")
+
+    if value.abs >= 1_000_000_000
+      compact_financial_amount(value / 1_000_000_000, symbol, "B")
+    elsif value.abs >= 1_000_000
+      compact_financial_amount(value / 1_000_000, symbol, "M")
+    elsif value.abs >= 1_000
+      compact_financial_amount(value / 1_000, symbol, "K")
+    else
+      "#{symbol}#{format_financial_number(value)}"
+    end
+  rescue ArgumentError
+    amount.to_s
+  end
+
   # Convert millisecond timestamp to Time object for time_ago_in_words
   # Also handles Time objects directly (for Rails native datetime columns)
   def ms_to_time(value)
@@ -162,5 +188,15 @@ module ApplicationHelper
     else
       ""
     end
+  end
+
+  private
+
+  def compact_financial_amount(value, symbol, suffix)
+    "#{symbol}#{format_financial_number(value)}#{suffix}"
+  end
+
+  def format_financial_number(value)
+    format("%.2f", value).sub(/\.00\z/, "").sub(/(\.\d)0\z/, '\\1')
   end
 end
