@@ -57,7 +57,7 @@ group :development do
 end
 
 group :test do
-  gem "minitest", "~> 5.25"
+  gem "minitest", "~> 6.0"
   # Use system testing for end-to-end browser tests
   gem "capybara"
   gem "selenium-webdriver"
