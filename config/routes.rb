@@ -124,6 +124,10 @@ Rails.application.routes.draw do
     resources :email_tests, only: [ :new, :create ]
   end
 
+  # Discovery endpoints must precede the slug fallback.
+  get "sitemap.xml", to: "discovery#sitemap", defaults: { format: :xml }
+  get "llms.txt", to: "discovery#llms", defaults: { format: :text }
+
   # Catch-all slug route (must be last)
   get ":slug", to: "slugs#show", as: :slug
 end

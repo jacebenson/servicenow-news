@@ -1,0 +1,71 @@
+{
+  "scope": "Local synthetic empty SQLite, anonymous browser. Metadata-only; UI templates unchanged. Not a production or Cloudflare measurement.",
+  "images": [
+    {
+      "path": "docs/evidence/ai-search/home-desktop-after.png",
+      "width": 1440,
+      "height": 800,
+      "sha256": "8463be95153de8aa99b56a8a6caaa34c8c82e450341affdba325ffc98ca0cab9"
+    },
+    {
+      "path": "docs/evidence/ai-search/home-desktop-before.png",
+      "width": 1440,
+      "height": 800,
+      "sha256": "8463be95153de8aa99b56a8a6caaa34c8c82e450341affdba325ffc98ca0cab9"
+    },
+    {
+      "path": "docs/evidence/ai-search/home-mobile-after.png",
+      "width": 390,
+      "height": 644,
+      "sha256": "1710d13aec1221c44b679e9f45c72c94152ac012e36b04b8edfa1dbe73f8e519"
+    },
+    {
+      "path": "docs/evidence/ai-search/home-mobile-before.png",
+      "width": 390,
+      "height": 644,
+      "sha256": "1710d13aec1221c44b679e9f45c72c94152ac012e36b04b8edfa1dbe73f8e519"
+    },
+    {
+      "path": "docs/evidence/ai-search/news-desktop-after.png",
+      "width": 1440,
+      "height": 800,
+      "sha256": "91aeb0ca31896992fe7304f9e6935f32d2efb91fce49911830bbf77f5fe630bc"
+    },
+    {
+      "path": "docs/evidence/ai-search/news-desktop-before.png",
+      "width": 1440,
+      "height": 800,
+      "sha256": "91aeb0ca31896992fe7304f9e6935f32d2efb91fce49911830bbf77f5fe630bc"
+    },
+    {
+      "path": "docs/evidence/ai-search/news-mobile-after.png",
+      "width": 390,
+      "height": 644,
+      "sha256": "ad2ac3557f113404c5fb84e0f0111bcd0215b549988dbe8e02a5e6b2ec03833f"
+    },
+    {
+      "path": "docs/evidence/ai-search/news-mobile-before.png",
+      "width": 390,
+      "height": 644,
+      "sha256": "ad2ac3557f113404c5fb84e0f0111bcd0215b549988dbe8e02a5e6b2ec03833f"
+    }
+  ],
+  "endpoints": {
+    "/sitemap.xml": {
+      "status": 200,
+      "content_type": "application/xml; charset=utf-8",
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>https://news.jace.pro/</loc>\n  </url>\n  <url>\n    <loc>https://news.jace.pro/i</loc>\n  </url>\n  <url>\n    <loc>https://news.jace.pro/p</loc>\n  </url>\n  <url>\n    <loc>https://news.jace.pro/a</loc>\n  </url>\n  <url>\n    <loc>https://news.jace.pro/financials</loc>\n  </url>\n  <url>\n    <loc>https://news.jace.pro/e</loc>\n  </url>\n  <url>\n    <loc>https://news.jace.pro/mvps</loc>\n  </url>\n</urlset>\n"
+    },
+    "/llms.txt": {
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "body": "# News Jace Pro\n\n> An independent ServiceNow news aggregator and ecosystem directory.\n\nExternal articles belong to their original publishers. Follow source links for original reporting.\n\n## Public directories\n\n- [ServiceNow news and ecosystem search](https://news.jace.pro/): Search collected ServiceNow news, partners, applications, financial activity, events, sessions, and MVP awards.\n- [ServiceNow news](https://news.jace.pro/i): Browse ServiceNow articles, videos, and podcasts collected from external sources. Follow the source links to read the originals.\n- [ServiceNow partners](https://news.jace.pro/p): Browse the ServiceNow partner directory and filter companies by services, partner level, and location.\n- [ServiceNow Store applications](https://news.jace.pro/a): Browse the collected ServiceNow Store application directory by company, application type, and availability.\n- [ServiceNow financial activity](https://news.jace.pro/financials): Explore ServiceNow acquisitions, investments, and company filings collected from public sources.\n- [ServiceNow events and sessions](https://news.jace.pro/e): Browse Knowledge and other event session collections, speakers, and available recordings.\n- [ServiceNow MVP awards](https://news.jace.pro/mvps): Explore ServiceNow community MVP award recipients and awards by year and type.\n\nSitemap: https://news.jace.pro/sitemap.xml\n"
+    },
+    "/robots.txt": {
+      "status": 200,
+      "content_type": "text/plain",
+      "body": "User-agent: *\nAllow: /\n\nSitemap: https://news.jace.pro/sitemap.xml\n"
+    }
+  },
+  "visual_unchanged": true
+}

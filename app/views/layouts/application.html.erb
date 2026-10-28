@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "News Jace Pro" %></title>
+    <% discovery_page = PublicDiscovery::PAGES[request.path] if request.query_parameters.empty? && params[:list].blank? %>
+    <title><%= discovery_page ? "#{discovery_page.first} - News Jace Pro" : (content_for(:title) || "News Jace Pro") %></title>
+    <% if discovery_page %>
+      <meta name="description" content="<%= discovery_page.last %>">
+      <link rel="canonical" href="<%= PublicDiscovery::ORIGIN + request.path %>">
+      <script type="application/ld+json"><%= raw json_escape({ "@context" => "https://schema.org", "@type" => request.path == "/" ? "WebSite" : "CollectionPage", "name" => discovery_page.first, "description" => discovery_page.last, "url" => PublicDiscovery::ORIGIN + request.path }.to_json) %></script>
+    <% elsif request.query_parameters.any? || params[:list].present? || %w[sessions users passwords accounts admin api search].include?(controller_path.split("/").first) || action_name == "export" %>
+      <meta name="robots" content="noindex, follow">
+    <% end %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
