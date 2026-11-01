@@ -3,6 +3,15 @@ require "test_helper"
 class ApplicationHelperTest < ActionView::TestCase
   self.fixture_table_names = []
 
+  test "external URLs allow only absolute HTTP and HTTPS links" do
+    assert_equal "https://example.com/path?a=1&b=2", safe_http_url("https://example.com/path?a=1&b=2")
+    assert_equal "http://example.com", safe_http_url(" http://example.com ")
+
+    [ nil, "javascript:alert(1)", "data:text/html,test", "//example.com", "/relative", "https://", "https://example.com/\nscript" ].each do |url|
+      assert_equal "#", safe_http_url(url), "Unexpectedly allowed #{url.inspect}"
+    end
+  end
+
   test "formats large financial amounts compactly" do
     assert_equal "$3M", financial_amount("3000000", "USD")
     assert_equal "4.85B", financial_amount("4850000000")

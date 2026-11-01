@@ -1,3 +1,5 @@
+require "open3"
+
 class ExtractVideoParticipantsJob < ApplicationJob
   queue_as :default
 
@@ -98,14 +100,14 @@ class ExtractVideoParticipantsJob < ApplicationJob
 
     begin
       # Try to get auto-generated subtitles first
-      result = `yt-dlp --write-auto-sub --sub-lang en --skip-download --output "#{temp_file}" "#{url}" 2>&1`
+      result, = Open3.capture2e("yt-dlp", "--write-auto-sub", "--sub-lang", "en", "--skip-download", "--output", temp_file, "--", url)
 
       # Check for subtitle file (could be .en.vtt or .en.srt)
       sub_file = Dir.glob("#{temp_file}*.{vtt,srt}").first
 
       unless sub_file && File.exist?(sub_file)
         # Try manually added subtitles
-        result = `yt-dlp --write-sub --sub-lang en --skip-download --output "#{temp_file}" "#{url}" 2>&1`
+        result, = Open3.capture2e("yt-dlp", "--write-sub", "--sub-lang", "en", "--skip-download", "--output", temp_file, "--", url)
         sub_file = Dir.glob("#{temp_file}*.{vtt,srt}").first
       end
 
