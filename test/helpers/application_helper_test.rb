@@ -12,6 +12,17 @@ class ApplicationHelperTest < ActionView::TestCase
     end
   end
 
+  test "imported template URLs are text rather than malformed crawlable links" do
+    html = render_markdown(%(<p>PHP: '<a href="%s">Resend confirmation email.</a>'</p>))
+    fragment = Nokogiri::HTML.fragment(html)
+    assert_equal "PHP: 'Resend confirmation email.'", fragment.text.strip
+    assert_empty fragment.css("a[href]")
+
+    html = render_markdown(%(<a href="https://example.com/a%20b">Valid encoded link</a> <a href="/i/123">Local link</a> <a href="javascript:alert(1)">Unsafe</a>))
+    fragment = Nokogiri::HTML.fragment(html)
+    assert_equal [ "https://example.com/a%20b", "/i/123" ], fragment.css("a[href]").map { |a| a["href"] }
+  end
+
   test "formats large financial amounts compactly" do
     assert_equal "$3M", financial_amount("3000000", "USD")
     assert_equal "4.85B", financial_amount("4850000000")

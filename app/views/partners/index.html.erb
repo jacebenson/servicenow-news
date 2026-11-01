@@ -19,7 +19,7 @@
     <%# Quick Filters %>
     <div class="flex flex-wrap items-center gap-2">
       <span class="text-sm font-medium text-gray-700">Quick filters:</span>
-      <%= link_to partners_path(level: @level, build: @build, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? nil : "true"),
+      <%= link_to partners_path(level: @level, build: @build, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? nil : "true"), rel: "nofollow",
           class: "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors #{@has_people ? 'bg-amber-500 text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'}" do %>
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -39,11 +39,11 @@
         <span class="text-sm font-medium text-gray-700">Partner Level:</span>
         <% @partner_levels.each do |level| %>
           <% active = @level == level %>
-          <%= link_to level, partners_path(level: level, build: @build, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+          <%= link_to level, partners_path(level: level, build: @build, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
               class: "rounded-full px-3 py-1 text-xs font-medium #{active ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
         <% end %>
         <% if @level.present? %>
-          <%= link_to "Clear", partners_path(build: @build, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+          <%= link_to "Clear", partners_path(build: @build, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
               class: "text-xs text-gray-500 hover:text-gray-700" %>
         <% end %>
       </div>
@@ -55,11 +55,11 @@
         <span class="text-sm font-medium text-gray-700">Build:</span>
         <% @build_levels.each do |level| %>
           <% active = @build == level %>
-          <%= link_to level, partners_path(level: @level, build: level, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+          <%= link_to level, partners_path(level: @level, build: level, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
               class: "rounded-full px-3 py-1 text-xs font-medium #{active ? 'bg-green-600 text-white' : 'bg-green-50 text-green-700 hover:bg-green-100'}" %>
         <% end %>
         <% if @build.present? %>
-          <%= link_to "Clear", partners_path(level: @level, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+          <%= link_to "Clear", partners_path(level: @level, consulting: @consulting, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
               class: "text-xs text-gray-500 hover:text-gray-700" %>
         <% end %>
       </div>
@@ -71,11 +71,11 @@
         <span class="text-sm font-medium text-gray-700">Consulting:</span>
         <% @consulting_levels.each do |level| %>
           <% active = @consulting == level %>
-          <%= link_to level, partners_path(level: @level, build: @build, consulting: level, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+          <%= link_to level, partners_path(level: @level, build: @build, consulting: level, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
               class: "rounded-full px-3 py-1 text-xs font-medium #{active ? 'bg-purple-600 text-white' : 'bg-purple-50 text-purple-700 hover:bg-purple-100'}" %>
         <% end %>
         <% if @consulting.present? %>
-          <%= link_to "Clear", partners_path(level: @level, build: @build, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+          <%= link_to "Clear", partners_path(level: @level, build: @build, country: @country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
               class: "text-xs text-gray-500 hover:text-gray-700" %>
         <% end %>
       </div>
@@ -91,11 +91,11 @@
         <div class="mt-2 flex flex-wrap gap-2">
           <% @countries.first(20).each do |country| %>
             <% active = @country == country %>
-            <%= link_to country, partners_path(level: @level, build: @build, consulting: @consulting, country: country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+            <%= link_to country, partners_path(level: @level, build: @build, consulting: @consulting, country: country, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
                 class: "rounded-full px-3 py-1 text-xs font-medium #{active ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
           <% end %>
           <% if @country.present? %>
-            <%= link_to "Clear", partners_path(level: @level, build: @build, consulting: @consulting, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil),
+            <%= link_to "Clear", partners_path(level: @level, build: @build, consulting: @consulting, state: @state_filter, search: @search, has_people: @has_people ? "true" : nil), rel: "nofollow",
                 class: "text-xs text-gray-500 hover:text-gray-700" %>
           <% end %>
         </div>

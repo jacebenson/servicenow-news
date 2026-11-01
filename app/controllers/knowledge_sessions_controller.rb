@@ -226,11 +226,10 @@ class KnowledgeSessionsController < ApplicationController
     end
 
     # Pagination
-    @per_page = params[:all] == "1" ? @total_count : 50
+    @per_page = params[:all] == "1" ? [ @total_count, 1 ].max : 50
     @page = (params[:page] || 1).to_i
     @page = 1 if @page < 1
     @total_pages = (@total_count.to_f / @per_page).ceil
-    @page = @total_pages if @page > @total_pages && @total_pages > 0
 
     # Handle pagination - works with both Relations (most sorts) and Arrays (time sort)
     if sessions.is_a?(Array)
@@ -409,5 +408,11 @@ class KnowledgeSessionsController < ApplicationController
 
   def set_event_path_helper
     @event = params[:event] || "k26"
+    unless %w[all k20 k21 k22 k23 k24 k25 k26 nulledge25].include?(@event)
+      return head :not_found
+    end
+    if action_name == "index" && (request.path == "/e" || request.path.start_with?("/e/"))
+      redirect_to event_sessions_path(@event, request.query_parameters.except("event")), status: :moved_permanently
+    end
   end
 end

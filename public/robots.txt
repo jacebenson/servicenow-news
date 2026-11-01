@@ -1,1 +1,5 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+User-agent: *
+Allow: /
+
+# Allow crawlers to read canonical and noindex directives on existing URLs.
+Sitemap: https://news.jace.pro/sitemap.xml
