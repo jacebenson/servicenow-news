@@ -93,10 +93,9 @@ class BackupJob < ApplicationJob
 
     # Use SQLite's .backup command which works even with active connections
     # .timeout 30000 = wait up to 30 seconds if database is locked
-    command = %Q(sqlite3 "#{db_path}" ".timeout 30000" ".backup '#{backup_path}'")
-    Rails.logger.info "[BACKUP] Running: #{command}"
-
-    result = system(command)
+    # Escape SQLite's command argument independently of the shell (which is not used).
+    backup_command = ".backup #{backup_path.to_s.dump}"
+    result = system("sqlite3", db_path.to_s, ".timeout 30000", backup_command)
 
     if result && File.exist?(backup_path)
       size_mb = (File.size(backup_path) / 1024.0 / 1024.0).round(2)

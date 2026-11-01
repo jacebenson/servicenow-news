@@ -12,13 +12,13 @@
     <div class="flex items-center gap-4">
       <% if logged_in? %>
         <% if @showing_list %>
-          <%= link_to "Show All", @all_events_view ? sessions_path : send("#{@event}_path"), class: "text-blue-600 hover:underline" %>
+          <%= link_to "Show All", @all_events_view ? sessions_path : event_sessions_path(@event), class: "text-blue-600 hover:underline" %>
         <% else %>
-          <%= link_to "My List", @all_events_view ? sessions_path(list: "mine") : send("#{@event}_list_path", list: "mine"), class: "text-blue-600 hover:underline" %>
+          <%= link_to "My List", @all_events_view ? sessions_path(list: "mine") : event_sessions_list_path(@event, list: "mine"), class: "text-blue-600 hover:underline" %>
         <% end %>
       <% end %>
 
-      <%= form_with url: (@all_events_view ? sessions_path : send("#{@event}_path")), method: :get, class: "flex gap-2", local: true do |f| %>
+      <%= form_with url: (@all_events_view ? sessions_path : event_sessions_path(@event)), method: :get, class: "flex gap-2", local: true do |f| %>
         <% if @session_event_filter.present? %>
           <%= hidden_field_tag :session_event, @session_event_filter %>
         <% end %>
@@ -40,9 +40,9 @@
     <%= link_to "Sessions", sessions_path,
         class: "px-4 py-2 rounded-lg text-sm font-medium #{@all_events_view ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
     <% unless @all_events_view %>
-      <%= link_to "Parties", send("#{@event}_path", tags: "party"),
+      <%= link_to "Parties", event_sessions_path(@event, tags: "party"),
           class: "px-4 py-2 rounded-lg text-sm font-medium #{@tags == 'party' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
-      <%= link_to "All Sessions", send("#{@event}_path"),
+      <%= link_to "All Sessions", event_sessions_path(@event),
           class: "px-4 py-2 rounded-lg text-sm font-medium #{@tags.blank? && @company_filter.blank? && !@exclude_servicenow && @session_types.blank? ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}" %>
     <% end %>
     <% if @event == "k26" %>
@@ -58,7 +58,7 @@
   <% unless @all_events_view %>
     <%# Export Button %>
     <div class="mb-4 flex justify-end">
-      <%= link_to send("#{@event}_export_path", params.permit(:search, :company, :exclude_servicenow, :recorded, :venue, :room, :tags, :speaker_filter, session_types: []).to_h, format: :csv),
+      <%= link_to event_sessions_export_path(@event, params.permit(:search, :company, :exclude_servicenow, :recorded, :venue, :room, :tags, :speaker_filter, session_types: []).to_h, format: :csv),
           class: "inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700" do %>
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -70,7 +70,7 @@
 
   <%# Filters %>
   <% advanced_filters_active = @venue_filter.present? || @room_filter.present? || @company_filter.present? || @exclude_servicenow || @session_types.present? || @speaker_filter.present? %>
-  <%= form_with url: (@all_events_view ? sessions_path : send("#{@event}_path")), method: :get, class: "mb-4 p-4 bg-gray-50 rounded-lg", local: true do |f| %>
+  <%= form_with url: (@all_events_view ? sessions_path : event_sessions_path(@event)), method: :get, class: "mb-4 p-4 bg-gray-50 rounded-lg", local: true do |f| %>
     <%# Preserve search if present %>
     <% if @search.present? %>
       <%= hidden_field_tag :search, @search %>
@@ -219,7 +219,7 @@
     <div class="mb-4">
       <p class="text-sm text-gray-600">
         Showing results for "<%= @search %>"
-        <%= link_to "Clear", @all_events_view ? sessions_path : send("#{@event}_path"), class: "text-blue-600 hover:underline ml-2" %>
+        <%= link_to "Clear", @all_events_view ? sessions_path : event_sessions_path(@event), class: "text-blue-600 hover:underline ml-2" %>
       </p>
     </div>
   <% end %>
@@ -239,7 +239,7 @@
   <%# Pagination %>
   <% if @total_pages > 1 || @showing_all %>
     <% pagination_params = params.permit(:search, :company, :exclude_servicenow, :recorded, :tags, :list, :venue, :room, :sort, :session_event, session_types: []).to_h.symbolize_keys %>
-    <% page_path = ->(extra = {}) { @all_events_view ? sessions_path(pagination_params.merge(extra)) : send("#{@event}_path", pagination_params.merge(extra)) } %>
+    <% page_path = ->(extra = {}) { @all_events_view ? sessions_path(pagination_params.merge(extra)) : event_sessions_path(@event, pagination_params.merge(extra)) } %>
     <div class="mt-6 flex flex-wrap items-center justify-between gap-4 border-t pt-4">
       <div class="text-sm text-gray-600">
         <% if @showing_all %>
