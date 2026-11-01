@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <% if public_noindex? %>
+      <meta name="robots" content="noindex, follow">
+    <% elsif public_canonical_url %>
+      <link rel="canonical" href="<%= public_canonical_url %>">
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 

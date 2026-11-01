@@ -6,9 +6,11 @@ class NewsItemsController < ApplicationController
     # Filter by participant slug
     if params[:participant].present?
       participant = Participant.find_by_slug(params[:participant])
+      return head :not_found unless participant
+
       if participant
         if participant.hidden? && !admin?
-          redirect_to items_path, alert: "Participant not found"
+          head :not_found
           return
         end
         @participant = participant
@@ -51,6 +53,6 @@ class NewsItemsController < ApplicationController
 
   def show
     @show_nav_tabs = true
-    @item = NewsItem.includes(:news_feed, :participants).find(params[:id])
+    @item = NewsItem.active.includes(:news_feed, :participants).find(params[:id])
   end
 end
