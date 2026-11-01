@@ -10,9 +10,6 @@ Rails.application.routes.draw do
   root "search#index"
   get "s", to: "search#index", as: :search
 
-  # RSS feed
-  get "feed", to: "news_items#index", as: :feed, defaults: { format: "rss" }
-
   # Authentication
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
@@ -31,6 +28,10 @@ Rails.application.routes.draw do
   get "i/search/:search", to: "news_items#index", as: :items_search
   get "i/:id", to: "news_items#show", as: :item, constraints: { id: /\d+/ }
   get "r/search/:search", to: "news_items#index", as: :items_search_alt
+
+  # Keep HTML routes before RSS: pagination generates URLs by controller/action.
+  # RSS feed
+  get "feed", to: "news_items#index", as: :feed, defaults: { format: "rss" }
 
   # Partners (/p)
   get "p", to: "partners#index", as: :partners
