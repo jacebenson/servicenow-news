@@ -20,14 +20,7 @@ jobs:
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: |
-          bin/brakeman --no-pager
-          code=$?
-          if [ "$code" -eq 5 ]; then
-            echo "Brakeman is not the latest version; the scan itself passed."
-            exit 0
-          fi
-          exit "$code"
+        run: bin/brakeman --no-pager
 
   scan_js:
     runs-on: ubuntu-latest
@@ -71,7 +64,7 @@ jobs:
     #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable sqlite3
 
       - name: Checkout code
         uses: actions/checkout@v4

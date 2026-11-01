@@ -50,7 +50,7 @@
           <% if @participant.linkedin_url.present? %>
             <div>
               <label class="text-sm font-medium text-gray-500">LinkedIn</label>
-              <p><%= link_to @participant.linkedin_url, @participant.linkedin_url, target: "_blank", class: "text-blue-600 hover:underline" %></p>
+              <p><%= link_to @participant.linkedin_url, safe_http_url(@participant.linkedin_url), target: "_blank", class: "text-blue-600 hover:underline" %></p>
             </div>
           <% end %>
 

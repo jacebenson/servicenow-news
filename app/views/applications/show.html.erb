@@ -44,7 +44,7 @@
             <% end %>
           <% end %>
           <% store_url = @app.landing_page.present? ? @app.landing_page : "https://store.servicenow.com/store/app/#{@app.listing_id || @app.source_app_id}" %>
-          <%= link_to store_url, target: "_blank", rel: "noopener",
+          <%= link_to safe_http_url(store_url), target: "_blank", rel: "noopener",
               class: "inline-flex items-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors text-sm whitespace-nowrap" do %>
             View in Store
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

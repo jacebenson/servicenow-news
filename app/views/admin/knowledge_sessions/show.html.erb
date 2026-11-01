@@ -15,7 +15,7 @@
     </div>
     <div class="flex gap-2">
       <% if @session.knowledge_url.present? %>
-        <%= link_to "View on Knowledge", @session.knowledge_url, target: "_blank", rel: "noopener",
+        <%= link_to "View on Knowledge", safe_http_url(@session.knowledge_url), target: "_blank", rel: "noopener",
             class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm" %>
       <% end %>
       <%= link_to "Edit", edit_admin_knowledge_session_path(@session),
@@ -32,7 +32,7 @@
   <div class="mt-4 text-sm text-gray-500">
     <p>Session ID: <code class="bg-gray-100 px-1 rounded"><%= @session.session_id %></code></p>
     <% if @session.recording_url.present? %>
-      <p class="mt-1">Recording: <%= link_to @session.recording_url, @session.recording_url, target: "_blank", class: "text-blue-600 hover:underline" %></p>
+      <p class="mt-1">Recording: <%= link_to @session.recording_url, safe_http_url(@session.recording_url), target: "_blank", class: "text-blue-600 hover:underline" %></p>
     <% end %>
   </div>
 </div>

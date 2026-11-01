@@ -162,7 +162,7 @@
                 <input type="radio" name="fields[linkedin_url]" value="source" class="mt-1 cursor-pointer field-radio" data-field="source">
                 <div class="text-sm break-all">
                   <% if @participant.linkedin_url.present? %>
-                    <%= link_to @participant.linkedin_url, @participant.linkedin_url, target: "_blank", class: "text-blue-600 hover:underline" %>
+                    <%= link_to @participant.linkedin_url, safe_http_url(@participant.linkedin_url), target: "_blank", class: "text-blue-600 hover:underline" %>
                   <% else %>
                     <span class="text-gray-400">—</span>
                   <% end %>
@@ -174,7 +174,7 @@
                 <input type="radio" name="fields[linkedin_url]" value="target" class="mt-1 cursor-pointer field-radio" data-field="target" <%= @target.linkedin_url.present? ? 'checked' : (@participant.linkedin_url.present? ? '' : 'checked') %>>
                 <div class="text-sm break-all">
                   <% if @target.linkedin_url.present? %>
-                    <%= link_to @target.linkedin_url, @target.linkedin_url, target: "_blank", class: "text-blue-600 hover:underline" %>
+                    <%= link_to @target.linkedin_url, safe_http_url(@target.linkedin_url), target: "_blank", class: "text-blue-600 hover:underline" %>
                   <% else %>
                     <span class="text-gray-400">—</span>
                   <% end %>
