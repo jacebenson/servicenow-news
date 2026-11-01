@@ -24,7 +24,7 @@ class PartnersControllerTest < ActionDispatch::IntegrationTest
   test "search and has people filters handle no matches" do
     get partners_path, params: { country: "DK - Denmark", has_people: "true", search: "Mondelez International" }
 
-    assert_response :success
+    assert_response :not_found
     assert_select "h3", count: 0
   end
 end

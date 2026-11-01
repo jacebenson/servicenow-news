@@ -63,9 +63,8 @@ class PartnersController < ApplicationController
     @show_nav_tabs = true
     @partner = Company.find(params[:id])
 
-    # Redirect to partners index if not a partner or inactive
     unless @partner.is_partner && @partner.active
-      redirect_to partners_path, alert: "Partner not found"
+      head :not_found
       return
     end
 

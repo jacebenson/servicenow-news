@@ -19,13 +19,18 @@ class ParticipantsController < ApplicationController
     @participant = Participant.find_by_slug(params[:name])
 
     unless @participant
-      redirect_to items_path, alert: "Participant not found"
+      head :not_found
       return
     end
 
     # NEW — return 404 if hidden
     if @participant.hidden? && !admin?
-      redirect_to items_path, alert: "Participant not found"
+      head :not_found
+      return
+    end
+
+    if request.path != person_path(name: @participant.slug)
+      redirect_to person_path(name: @participant.slug), status: :moved_permanently
       return
     end
 
@@ -52,13 +57,13 @@ class ParticipantsController < ApplicationController
       # Create new company
       company = Company.create!(name: params[:new_company_name])
       @participant.update(company_id: company.id, company_name: company.name)
-      redirect_to who_path(name: @participant.slug), notice: "Created and linked to #{company.name}"
+      redirect_to person_path(name: @participant.slug), notice: "Created and linked to #{company.name}"
     elsif params[:company_id].present?
       company = Company.find(params[:company_id])
       @participant.update(company_id: company.id)
-      redirect_to who_path(name: @participant.slug), notice: "Linked to #{company.name}"
+      redirect_to person_path(name: @participant.slug), notice: "Linked to #{company.name}"
     else
-      redirect_to who_path(name: @participant.slug), alert: "No company selected"
+      redirect_to person_path(name: @participant.slug), alert: "No company selected"
     end
   end
 end

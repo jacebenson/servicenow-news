@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
+  get "sitemap.xml", to: "sitemaps#index", defaults: { format: "xml" }
+  get "sitemaps/pages.xml", to: "sitemaps#pages", defaults: { format: "xml" }
+  get "sitemaps/:type-:page.xml", to: "sitemaps#show", defaults: { format: "xml" }
+
   # Search-first entry point
   root "search#index"
   get "s", to: "search#index", as: :search

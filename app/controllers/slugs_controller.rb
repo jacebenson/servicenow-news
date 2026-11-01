@@ -5,25 +5,21 @@ class SlugsController < ApplicationController
     participant = Participant.find_by_slug(slug)
     if participant
       if participant.hidden? && !admin?
-        redirect_to items_path, alert: "Page not found"
+        head :not_found
         return
       end
-      redirect_to who_path(name: participant.slug)
+      redirect_to person_path(name: participant.slug), status: :moved_permanently
       return
     end
 
     # Try to find a company
     company = Company.where("LOWER(name) = ?", slug.downcase).first
-    if company
-      if company.is_partner?
-        redirect_to partners_search_path(search: company.name)
-      else
-        redirect_to admin_companies_path(search: company.name)
-      end
+    if company&.is_partner? && company.active?
+      redirect_to partner_path(company), status: :moved_permanently
       return
     end
 
     # Not found
-    redirect_to items_path, alert: "Page not found"
+    head :not_found
   end
 end
