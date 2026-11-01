@@ -15,7 +15,9 @@ module KnowledgeSessionsHelper
     end
   end
 
-  def event_sessions_export_path(event, options = {})
+  def event_sessions_export_path(event, options = {}, **format_options)
+    options = options.symbolize_keys.merge(format_options)
+
     case event
     when "k20" then k20_export_path(options)
     when "k21" then k21_export_path(options)
