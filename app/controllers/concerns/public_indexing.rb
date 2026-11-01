@@ -14,7 +14,8 @@ module PublicIndexing
   COLLECTIONS = {
     "partners" => :@partners, "news_items" => :@news_items,
     "applications" => :@apps, "participants" => :@participants,
-    "financials" => :@financials, "mvp_awards" => :@participants
+    "financials" => :@financials, "mvp_awards" => :@participants,
+    "knowledge_sessions" => :@sessions
   }.freeze
 
   included do
@@ -67,9 +68,11 @@ module PublicIndexing
   end
 
   def set_public_indexing_status
-    if public_page? && action_name == "index" && response.successful? && request.format.html?
+    if public_page? && action_name == "index" && response.successful? && response.media_type == "text/html"
       collection = instance_variable_get(COLLECTIONS[controller_name]) if COLLECTIONS.key?(controller_name)
-      empty_filter = public_filters? && collection && collection.empty?
+      # Display options alone do not describe a missing subset of records.
+      result_filters = FILTERS.fetch(controller_name, []) - %w[sort direction all]
+      empty_filter = result_filters.any? { |key| params[key].present? } && collection && collection.empty?
       beyond_last = collection.respond_to?(:out_of_range?) && collection.current_page > 1 && collection.out_of_range?
       beyond_last ||= controller_name == "knowledge_sessions" && @page && @page > [ @total_pages, 1 ].max
       response.status = :not_found if empty_filter || beyond_last

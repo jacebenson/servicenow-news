@@ -39,6 +39,34 @@ class PublicIndexingTest < ActionDispatch::IntegrationTest
     assert_match "No partners found", response.body
   end
 
+  test "HTML status codes do not depend on the crawler Accept header" do
+    [ "*/*", "text/html", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" ].each do |accept|
+      get partners_path, params: { search: "zzzznonexistent123", has_people: "1" }, headers: { "Accept" => accept }
+      assert_response :not_found
+      assert_equal "text/html", response.media_type
+      assert_equal "noindex, follow", response.headers["X-Robots-Tag"]
+      assert_match "No partners found", response.body
+
+      get partners_path, params: { page: 2000 }, headers: { "Accept" => accept }
+      assert_response :not_found
+    end
+  end
+
+  test "empty event filters return 404 for relation and array pagination" do
+    [ nil, "time" ].each do |sort|
+      get k26_path, params: { search: "zzzznonexistent123", sort: sort }, headers: { "Accept" => "*/*" }
+      assert_response :not_found
+      assert_equal "noindex, follow", response.headers["X-Robots-Tag"]
+      assert_select "meta[name=robots][content='noindex, follow']", count: 1
+    end
+  end
+
+  test "RSS feeds retain their status when search results are empty" do
+    get feed_path, params: { search: "zzzznonexistent123" }
+    assert_response :success
+    assert_equal "application/rss+xml", response.media_type
+  end
+
   test "invalid and nonexistent pagination does not duplicate the first or last page" do
     [ "0", "-1", "banana", "999999999999999999999", [ "2" ] ].each do |page|
       get partners_path, params: { page: page }
