@@ -145,7 +145,7 @@
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Links</h2>
         <div class="space-y-3">
           <% if @partner.website.present? %>
-            <%= link_to @partner.website, target: "_blank", rel: "noopener",
+            <%= link_to safe_http_url(@partner.website), target: "_blank", rel: "noopener",
                 class: "flex items-center gap-2 text-blue-600 hover:underline" do %>
               <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
@@ -154,7 +154,7 @@
             <% end %>
           <% end %>
           <% if @partner.servicenow_url.present? %>
-            <%= link_to @partner.servicenow_url, target: "_blank", rel: "noopener",
+            <%= link_to safe_http_url(@partner.servicenow_url), target: "_blank", rel: "noopener",
                 class: "flex items-center gap-2 text-blue-600 hover:underline" do %>
               <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>

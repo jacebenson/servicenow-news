@@ -1,4 +1,6 @@
 class KnowledgeSessionsController < ApplicationController
+  include KnowledgeSessionsHelper
+
   before_action :set_event_path_helper
   helper_method :event_name
 
@@ -283,7 +285,7 @@ class KnowledgeSessionsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_back(fallback_location: send("#{params[:event] || 'k26'}_path")) }
+      format.html { redirect_back(fallback_location: event_sessions_path(@event)) }
     end
   end
 

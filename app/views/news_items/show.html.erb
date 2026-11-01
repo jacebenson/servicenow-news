@@ -84,7 +84,7 @@
   <%# Source link %>
   <% if @item.url.present? %>
     <div class="border-t pt-4 mt-6">
-      <%= link_to @item.url, target: "_blank", rel: "noopener",
+      <%= link_to safe_http_url(@item.url), target: "_blank", rel: "noopener",
           class: "inline-flex items-center gap-2 text-blue-600 hover:underline" do %>
         View original source
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

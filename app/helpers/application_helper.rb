@@ -1,4 +1,19 @@
+require "uri"
+
 module ApplicationHelper
+  # Imported links must be absolute web URLs, never executable schemes.
+  def safe_http_url(value)
+    url = value.to_s.strip
+    return "#" if url.match?(/[[:cntrl:]]/)
+
+    uri = URI.parse(url)
+    return "#" unless %w[http https].include?(uri.scheme) && uri.host.present?
+
+    url
+  rescue URI::InvalidURIError
+    "#"
+  end
+
   # Check if a store app logo URL is usable (not a broken ServiceNow internal URL)
   def valid_logo_url?(url)
     return false if url.blank?
