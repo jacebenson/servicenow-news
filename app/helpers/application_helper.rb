@@ -105,9 +105,16 @@ module ApplicationHelper
       no_intra_emphasis: true
     )
 
+    # Imported code examples can contain template URLs such as href="%s".
+    # Keep their text without emitting malformed links for crawlers to follow.
+    fragment = Nokogiri::HTML.fragment(markdown.render(text))
+    fragment.css("a[href]").each do |link|
+      link.remove_attribute("href") if link["href"].match?(/%(?![0-9a-f]{2})/i)
+    end
+
     # Sanitize HTML output to prevent XSS
     sanitize(
-      markdown.render(text),
+      fragment.to_html,
       tags: %w[p br strong em b i a code pre ul ol li h1 h2 h3 h4 h5 h6 blockquote table thead tbody tr th td hr span div img],
       attributes: %w[href target rel class id src alt title width height]
     )
